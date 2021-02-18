@@ -22,11 +22,14 @@ function getEnable()
 chrome.extension.onMessage.addListener(
 	function(request, sender, sendResponse) {
 		console.log(request, sender, sendResponse);
-		if (sender.url.match("http://10.10.171.201/zentao/task-view-")) {
-			return;
+
+		if(changeBackColorEnable) {
+			if (sender.url.match("http://10.10.171.201/zentao/task-view-")) {
+				chrome.tabs.sendMessage(m_tabId,{greeting:'yes', replace:'$("div").not(".main-actions")'});			
+			} else {
+				chrome.tabs.sendMessage(m_tabId,{greeting:'yes'});
+			}
 		}
-		
-		if(changeBackColorEnable)
-			chrome.tabs.sendMessage(m_tabId,{greeting:'yes'});
+
 	}
 );
