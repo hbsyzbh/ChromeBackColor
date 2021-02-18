@@ -3,10 +3,7 @@
 chrome.extension.onMessage.addListener(
 	function(request, sender, sendResponse) {
 		if (request.greeting == "yes") {
-			$("body").css("background-color", "#CCE8CC");
-			$("p").css("background-color", "#CCE8CC");
-			$("div").css("background-color", "#CCE8CC");
-			$("pre").css("background-color", "#CCE8CC");			
+			$("*").not("button").css("background-color", "#CCE8CC");
 		} else {
 			window.location.reload(true);
 		}
