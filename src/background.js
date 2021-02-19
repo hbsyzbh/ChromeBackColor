@@ -18,17 +18,34 @@ function getEnable()
 	return changeBackColorEnable;
 }
 
+var filters = [
+	{
+		regexp: "http://10.10.171.201/zentao/task-view-",
+		replace: '$("div").not(".main-actions")'
+	},
+	{
+		regexp: "http://mail.galachip.com/",
+		notchange :true
+	},
+];
 
 chrome.extension.onMessage.addListener(
 	function(request, sender, sendResponse) {
 		console.log(request, sender, sendResponse);
 
 		if(changeBackColorEnable) {
-			if (sender.url.match("http://10.10.171.201/zentao/task-view-")) {
-				chrome.tabs.sendMessage(m_tabId,{greeting:'yes', replace:'$("div").not(".main-actions")'});			
-			} else {
-				chrome.tabs.sendMessage(m_tabId,{greeting:'yes'});
+
+			for(var index = 0;index < filters.length;index++){
+				if (sender.url.match(filters[index].regexp)) {
+					if (filters[index].notchange != true) { 
+						var replace = filters[index].replace;
+						chrome.tabs.sendMessage(m_tabId,{greeting:'yes', replace});
+					}
+					return;
+				}
 			}
+
+			chrome.tabs.sendMessage(m_tabId,{greeting:'yes'});
 		}
 
 	}
